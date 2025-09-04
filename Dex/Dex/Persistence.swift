@@ -14,10 +14,20 @@ struct PersistenceController {
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+        
+        let newPokemon = Pokemon(context: viewContext)
+        newPokemon.id = 1
+        newPokemon.name = "bulbasur" // optional by default, needs to be unwrapped, also types and Urls
+        newPokemon.types = ["grass", "poison"]
+        newPokemon.hp = 45
+        newPokemon.attack = 49
+        newPokemon.defense = 49
+        newPokemon.specialAttack = 65
+        newPokemon.specialDefense = 65
+        newPokemon.speed = 45
+        newPokemon.sprite = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
+        newPokemon.shiny = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png")
+        // Favorite is false by default
         do {
             try viewContext.save()
         } catch {
