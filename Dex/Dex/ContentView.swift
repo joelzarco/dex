@@ -19,15 +19,45 @@ struct ContentView: View {
     let fetcher = FetchService()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(pokedex) { pokemon in
-                    NavigationLink {
-                        Text(pokemon.name ?? "No name")
-                    } label: {
-                        Text(pokemon.name ?? "No name")
-                    }
-                }
+                    NavigationLink(value: pokemon) {
+                        // this component is the link(cell)
+                        AsyncImage(url: pokemon.sprite){ image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 100, height: 100)
+                        
+                        VStack(alignment: .leading) {
+                            Text(pokemon.name?.capitalized ?? "😴") // or force unwrapped it
+                                .fontWeight(.bold)
+                            HStack{
+                                ForEach(pokemon.types!, id: \.self){ type in
+                                    Text(type.capitalized)
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(.black)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 4)
+                                        .background(Color(type.capitalized)) // type match colors in resources
+                                        .clipShape(Capsule())
+                                        
+                                    
+                                }
+                            }
+                        }
+                    } // NavLikn
+                } // ForE
+            } // Lst
+            .navigationTitle(Text("Pokedex"))
+            .navigationDestination(for: Pokemon.self){ pokemon in
+                // another way to do navigation, this compnent is the destination
+                Text(pokemon.name ?? "No name :( ")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
