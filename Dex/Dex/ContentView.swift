@@ -100,7 +100,8 @@ struct ContentView: View {
             }
             .navigationDestination(for: Pokemon.self){ pokemon in
                 // another way to do navigation, this compnent is the destination
-                Text(pokemon.name ?? "No name :( ")
+                PokemonDetail()
+                    .environmentObject(pokemon)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
