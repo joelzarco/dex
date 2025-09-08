@@ -13,6 +13,8 @@ struct ContentView: View {
     // Sort descriptor refactored from template code
     @FetchRequest<Pokemon>(sortDescriptors: [SortDescriptor(\.id)], animation: .default) private var pokedex
     
+    @FetchRequest<Pokemon>(sortDescriptors: []) private var all
+    
     @State private var searchText : String = ""
     @State private var filterByFavourite : Bool = false
     
@@ -51,7 +53,6 @@ struct ContentView: View {
                         .frame(width: 100, height: 100)
                         
                         VStack(alignment: .leading) {
-                            
                             HStack{
                                 Text(pokemon.name?.capitalized ?? "😴") // or force unwrapped it
                                     .fontWeight(.bold)
@@ -74,6 +75,18 @@ struct ContentView: View {
                             }
                         }
                     } // NavLikn
+                    .swipeActions(edge: .leading){
+                        Button(pokemon.favorite ? "Remove from favs" : "Add to favs", systemImage: "start"){
+                            pokemon.favorite.toggle()
+                            do{
+                                try viewContext.save()
+                            }
+                            catch{
+                                print(error)
+                            }
+                        }
+                        .tint(pokemon.favorite ? .gray : .yellow)
+                    }
                 } // ForE
             } // Lst
             .navigationTitle(Text("Pokedex"))
@@ -98,13 +111,9 @@ struct ContentView: View {
                     }
                     .tint(.yellow)
                 }
-                ToolbarItem {
-                    Button("Add Item", systemImage: "plus") {
-                    }
-                }
             }
         }
-        .onAppear{
+        .task{
             getPokemon()
         }
     } // View
