@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+struct Stat : Identifiable {
+    let id : Int
+    let name : String
+    let value : Int16
+}
+
 extension Pokemon {
     // extensions only computed properties
     var background : ImageResource {
@@ -25,4 +31,28 @@ extension Pokemon {
                     .normalgrasselectricpoisonfairy
         }
     }
+    
+    var typeColor : Color{
+        return Color(types![0].capitalized)
+    }
+    
+    var stats : [Stat]{
+        return [
+            Stat(id: 1, name: "HP", value: hp),
+            Stat(id: 2, name: "Attack", value: attack),
+            Stat(id: 3, name: "Defense", value: defense),
+            Stat(id: 4, name: "SpecialAttack", value: specialAttack),
+            Stat(id: 5, name: "SpecialDefense", value: specialDefense),
+            Stat(id: 6, name: "Speed", value: speed)
+        ]
+    }
+    
+    // find highest stat to be able to chart all properly
+    var highestStat : Stat{
+        // one line version stats.max {$0.value < $1.value }!
+        stats.max { stat1, stat2 in
+            stat1.value < stat2.value
+        }!
+    }
 }
+
