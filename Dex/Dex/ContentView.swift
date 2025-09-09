@@ -76,7 +76,7 @@ struct ContentView: View {
                         }
                     } // NavLikn
                     .swipeActions(edge: .leading){
-                        Button(pokemon.favorite ? "Remove from favs" : "Add to favs", systemImage: "start"){
+                        Button(pokemon.favorite ? "Remove from favs" : "Add to favs", systemImage: "star"){
                             pokemon.favorite.toggle()
                             do{
                                 try viewContext.save()
