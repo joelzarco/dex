@@ -65,6 +65,10 @@ struct PokemonDetail: View {
             } // Hs
             .padding()
             
+            Text("Stats")
+                .padding(.bottom, -10) // to bring closer the chart
+            
+            Stats(pokemon: pokemon)
         }
         .navigationTitle(pokemon.name!.capitalized)
     }
