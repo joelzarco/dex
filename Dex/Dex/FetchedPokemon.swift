@@ -63,6 +63,16 @@ struct FetchedPokemon: Decodable {
             let type = try typeContainer.decode(String.self, forKey: .name)
             decodedTypes.append(type)
         }
+        // some items have two types "normal" and "Flying", but the desired order is "Flying" as the main type. The following types should change their order
+        // unnecesary but :(
+        if decodedTypes.count == 2 &&  decodedTypes[0] == "normal"{
+            //let tempType = decodedTypes[0]
+            //decodedTypes[0] = decodedTypes[1]
+            //decodedTypes[1] = tempType
+            // short version of this swap
+            decodedTypes.swapAt(0, 1)
+        }
+        
         types = decodedTypes
         // now a similar process for stats, but we note they have an order and we only need its value not their name
         var decodedStats: [Int16] = []
