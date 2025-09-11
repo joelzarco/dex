@@ -43,7 +43,7 @@ struct ContentView: View {
                 ForEach(pokedex) { pokemon in
                     NavigationLink(value: pokemon) {
                         // this component is the link(cell)
-                        AsyncImage(url: pokemon.sprite){ image in
+                        AsyncImage(url: pokemon.spriteURL){ image in
                             image
                                 .resizable()
                                 .scaledToFit()
@@ -134,8 +134,8 @@ struct ContentView: View {
                     pokemon.specialAttack = fetchedPokemon.specialAttack
                     pokemon.specialDefense = fetchedPokemon.specialDefense
                     pokemon.speed = fetchedPokemon.speed
-                    pokemon.sprite = fetchedPokemon.sprite
-                    pokemon.shiny = fetchedPokemon.shiny
+                    pokemon.spriteURL = fetchedPokemon.spriteURL
+                    pokemon.shinyURL = fetchedPokemon.shinyURL
                     
                     // just to test fav filter
                     if pokemon.id % 2 == 0{
@@ -143,14 +143,30 @@ struct ContentView: View {
                     }
                     
                     try viewContext.save()
-                
                 }
                 catch{
                     print("Error: \(error)")
                 }
             }
+            // after all data has been downloaded then saved it
+            storeSprites()
         }
-        
+    } // func getPok
+    
+    private func storeSprites(){
+        Task{
+            do{
+                for pokemon in all{
+                    // save actual image to coreData
+                    pokemon.sprite = try await URLSession.shared.data(from: pokemon.spriteURL!).0 // .0 means just data, ignore response
+                    pokemon.shiny = try await URLSession.shared.data(from: pokemon.shinyURL!).0
+                    try viewContext.save()
+                }
+            }
+            catch{
+                print(error)
+            }
+        }
     }
 }
 
