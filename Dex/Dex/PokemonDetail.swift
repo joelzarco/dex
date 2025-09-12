@@ -21,16 +21,29 @@ struct PokemonDetail: View {
                     .resizable()
                     .scaledToFit()
                     .shadow(color: .black, radius: 5)
-                AsyncImage(url: showShiny ? pokemon.shinyURL : pokemon.spriteURL){ image in
-                    image
-                        .interpolation(.none) // looks shaper :)
+                // check if images have been saved to db
+                if pokemon.sprite == nil || pokemon.shiny == nil{
+                    
+                    AsyncImage(url: showShiny ? pokemon.shinyURL : pokemon.spriteURL){ image in
+                        image
+                            .interpolation(.none) // looks shaper, pixelated as intended
+                            .resizable()
+                            .scaledToFit()
+                            .shadow(color: .black, radius: 5)
+                        
+                    } placeholder: {
+                        ProgressView()
+                    }
+                }
+                else{
+                    // use images from db
+                    (showShiny ? pokemon.shinyImage : pokemon.spriteImage)
+                        .interpolation(.none) //
                         .resizable()
                         .scaledToFit()
                         .shadow(color: .black, radius: 5)
-                    
-                } placeholder: {
-                    ProgressView()
                 }
+                
             } // Zs
             
             HStack{

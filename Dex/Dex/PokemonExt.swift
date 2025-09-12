@@ -15,6 +15,24 @@ struct Stat : Identifiable {
 
 extension Pokemon {
     // extensions only computed properties
+    
+    var spriteImage : Image{
+        // chech first if data has been downloaded
+        if let data = sprite, let image = UIImage(data: data){
+            return Image(uiImage: image)
+        } else {
+            return Image(.bulbasaur) // default from assets
+        }
+    }
+    
+    var shinyImage : Image{
+        if let data = shiny, let image = UIImage(data: data){
+            return Image(uiImage: image)
+        } else {
+            return Image(.shinybulbasaur)
+        }
+    }
+    
     var background : ImageResource {
         switch types![0]{
             case "rock", "ground", "steel", "fighting", "ghost", "dark", "psychic":

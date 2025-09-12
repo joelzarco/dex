@@ -43,14 +43,22 @@ struct ContentView: View {
                 ForEach(pokedex) { pokemon in
                     NavigationLink(value: pokemon) {
                         // this component is the link(cell)
-                        AsyncImage(url: pokemon.spriteURL){ image in
-                            image
+                        // If data has not been sved to db use async, else use coreData img
+                        if pokemon.sprite == nil {
+                            AsyncImage(url: pokemon.spriteURL){ image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 100, height: 100)
+                        } else{
+                            pokemon.spriteImage
                                 .resizable()
                                 .scaledToFit()
-                        } placeholder: {
-                            ProgressView()
+                                .frame(width: 100, height: 100)
                         }
-                        .frame(width: 100, height: 100)
                         
                         VStack(alignment: .leading) {
                             HStack{
